@@ -14,51 +14,55 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-class Solution {
+class Solution {    
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         LinkedList<TreeNode> queue1 = findPath(root, p);
-        System.out.println("---");
         LinkedList<TreeNode> queue2 = findPath(root, q);
         TreeNode parent = root;
         queue1.removeFirst();
         queue2.removeFirst();
-        System.out.println(queue1.size()+ "," + queue2.size());
         while(!queue1.isEmpty() && !queue2.isEmpty()) {
             TreeNode cur1 = queue1.removeFirst();
             TreeNode cur2 = queue2.removeFirst();
-            System.out.println(cur1.val + "," + cur2.val);
             if (cur1 != cur2) {
                 return parent;
             }
             parent = cur1;
         }
-        return null;
+        return parent;
     }
 
     private LinkedList<TreeNode> findPath(TreeNode root, TreeNode p) {
         LinkedList<TreeNode> queue = new LinkedList<>();
-        TreeNode node = root;
-        while (root != null) {
-            queue.addLast(root);
-            root = root.left;
-        }
+        Map<TreeNode, Integer> nodeVisitedState = new HashMap<TreeNode, Integer>();
+        int NONE = 0;
+        int LEFT = 1;
+        int BOTH = 2;
+        queue.addLast(root);
+        nodeVisitedState.put(root, NONE);
         while (!queue.isEmpty()) {
-            TreeNode t = queue.getLast();
-            if (t == p) {
-                break;
+            TreeNode cur = queue.getLast();
+            if (cur == p) {
+                return queue;
             }
-            t = queue.removeLast();
-            t = t.right;
-            while (t != null) {
-                queue.addLast(t);
-                t = t.left;
+            int state = nodeVisitedState.get(cur);
+            if (state == NONE) {
+                if (cur.left != null) {
+                    queue.addLast(cur.left);
+                    nodeVisitedState.put(cur.left, NONE);
+                }
+                nodeVisitedState.put(cur, LEFT);
+            } else if (state == LEFT) {
+                if (cur.right != null) {
+                    queue.addLast(cur.right);
+                    nodeVisitedState.put(cur.right, NONE);
+                }
+                nodeVisitedState.put(cur, BOTH);
+            } else {
+                queue.removeLast();
             }
         }
-        while(!queue.isEmpty()) {
-            System.out.print(queue.removeFirst().val);
-        }
-        System.out.print("---");
-        return queue;
+        return null;
     }
 }
 // @lc code=end
