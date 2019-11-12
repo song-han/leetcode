@@ -15,45 +15,31 @@
  * }
  */
 class BSTIterator {
-
-    TreeNode head;
-
+    
+    Stack<TreeNode> stack;
+    
     public BSTIterator(TreeNode root) {
-        head = new TreeNode(0);
-        init(root);
-    }
-
-    private void init(TreeNode root) {
-        // inorder traverse
-        Stack<TreeNode> stack = new Stack<>();
-        TreeNode cur = root;
-        TreeNode tail = head;
-        while (cur != null) {
-            stack.push(cur);
-            cur = cur.left;
-        }
-        while(!stack.isEmpty()) {
-            cur = stack.pop();
-            tail.right = cur;
-            tail = tail.right;
-            cur = cur.right;
-            while (cur != null) {
-                stack.push(cur);
-                cur = cur.left;
-            }
-        }
+        stack = new Stack<>();
+        pushAll(root);
     }
     
     /** @return the next smallest number */
     public int next() {
-        TreeNode next = head.right;
-        head = head.right;
-        return next.val;
+        TreeNode top = stack.pop();
+        pushAll(top.right);
+        return top.val;
     }
     
     /** @return whether we have a next smallest number */
     public boolean hasNext() {
-        return head.right != null;
+        return !stack.isEmpty();
+    }
+    
+    private void pushAll(TreeNode root) {
+        while (root != null) {
+            stack.push(root);
+            root = root.left;
+        }
     }
 }
 

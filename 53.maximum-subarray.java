@@ -19,45 +19,14 @@
 
 class Solution {
     public int maxSubArray(int[] nums) {
-        // return solution1(nums);
-        return solution2(nums);
-    }
-
-    private int solution1(int[] nums) {
-        int max = Integer.MIN_VALUE;
-        for (int i = 0; i < nums.length; i++) {
-            int sum = 0;
-            for (int j = i; j < nums.length; j++) {
-                sum += nums[j];
-                max = Math.max(sum, max);
-            }
+        int len = nums.length;
+        int preSum = nums[0];
+        int max = preSum;
+        for (int i = 1; i < len; i++) {
+            preSum = Math.max(nums[i], preSum + nums[i]);
+            max = Math.max(preSum, max);
         }
         return max;
-    }
-
-    private int solution2(int[] nums) {
-        // 子序列肯定以数列中某个元素作为结尾
-        // 那我们先求以某个元素结尾的所有子序列的最大和
-        int max = Integer.MIN_VALUE;
-        int pre = 0;
-        for (int i = 0; i < nums.length; i++) {
-            if (i == 0) {
-                pre = nums[i];
-            } else {
-                if (pre >= 0) {
-                    pre += nums[i];
-                } else {
-                    pre = nums[i];
-                }
-            }
-            max = Math.max(max, pre);
-        }
-        return max;
-    }
-
-    private int solution3(int[] nums) {
-        // 分治法
-        return 0;
     }
 }
 // @lc code=end
