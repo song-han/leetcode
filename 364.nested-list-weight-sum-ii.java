@@ -48,30 +48,28 @@
  */
 class Solution {
     public int depthSumInverse(List<NestedInteger> nestedList) {
-        int depth = getDepth(nestedList);
-        return sum(nestedList, depth);
-    }
-    
-    private int sum(List<NestedInteger> nestedList, int depth) {
+        Queue<NestedInteger> queue = new LinkedList<>();
+        for (NestedInteger e: nestedList) {
+            queue.add(e);
+        }
         int sum = 0;
-        for (NestedInteger nested: nestedList) {
-            if (nested.isInteger()) {
-                sum += depth * nested.getInteger();
-            } else {
-                sum += sum(nested.getList(), depth - 1);
+        int pre = 0;
+        while (!queue.isEmpty()) {
+            int levelSum = 0;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                NestedInteger curN = queue.remove();
+                if (curN.isInteger()) {
+                    levelSum += curN.getInteger();
+                } else {
+                    for (NestedInteger n: curN.getList()) {
+                        queue.add(n);
+                    }
+                }
             }
+            pre += levelSum;
+            sum += pre;
         }
         return sum;
-    }
-    
-    private int getDepth(List<NestedInteger> nestedList) {
-        int depth = 1;
-        for (NestedInteger nested: nestedList) {
-            if (!nested.isInteger()) {
-                int subDepth = getDepth(nested.getList());
-                depth = Math.max(depth, 1 + subDepth);
-            }
-        }
-        return depth;
     }
 }

@@ -15,34 +15,22 @@
  */
 class Solution {
     public ListNode rotateRight(ListNode head, int k) {
-        if (head == null) return head;
-        ListNode h = head;
-        int count = 0;
-        while (h != null) {
-            count++;
-            h = h.next;
-        }
-        int step = count - k % count;
-        if (step == count) return head;
-        ListNode dummy = new ListNode(0);
-        dummy.next = head;
-        ListNode tail = dummy;
-        // find tail
+        if (head == null) return null;
+        ListNode tail = head;
+        int count = 1;
         while (tail.next != null) {
             tail = tail.next;
+            count++;
         }
-
-        ListNode newTail = dummy;
-        while(step > 0) {
-            step--;
-            newTail = newTail.next;
+        tail.next = head;
+        int rotation = count - k % count;
+        while (rotation > 0) {
+            head = head.next;
+            tail = tail.next;
+            rotation--;
         }
-        System.out.println(newTail.val);
-        ListNode newHead = newTail.next;
-        newTail.next = null;
-        tail.next = dummy.next;
-
-        return newHead;
+        tail.next = null;
+        return head;
     }
 }
 // @lc code=end

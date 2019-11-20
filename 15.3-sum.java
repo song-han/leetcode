@@ -7,27 +7,34 @@
 // @lc code=start
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-        
-    }
-
-    private List<List<Integer>> solution1(int[] nums) {
         Arrays.sort(nums);
-        List<List<Integer>> result = new ArrayList<>();
+        List<List<Integer>> results = new ArrayList<>();
         for (int i = 0; i < nums.length - 2; i++) {
-            if (i == 0 || nums[i] != nums[i -1 ]) {
+            if (nums[i] > 0) {
+                break;
+            }
+            if (i == 0 || nums[i] != nums[i - 1]) {
                 int start = i + 1;
                 int end = nums.length - 1;
                 while (start < end) {
-                    if (nums[i] + nums[start] + nums[end] == 0) {
-                        List<Integer> triple = new ArrayList<>();
-                        triple.add(nums[i]);
-                        triple.add(nums[start]);
-                        triple.add(nums[end]);
-                        result.add(triple);
+                    int sum = nums[i] + nums[start] + nums[end];
+                    if (sum == 0) {
+                        results.add(Arrays.asList(nums[i], nums[start++], nums[end--]));
+                        while (start < end && nums[start] == nums[start - 1]) {
+                            start++;
+                        }
+                        while (start < end && nums[end] == nums[end + 1]) {
+                            end--;
+                        }
+                    } else if (sum < 0) {
+                        start++;
+                    } else {
+                        end--;
                     }
                 }
             }
         }
+        return results;
     }
 }
 // @lc code=end

@@ -14,15 +14,16 @@ class Solution {
     }
 
     private String solution1(String s) {
+        if (s.length() < 2) {
+            return s;
+        }
         String result = "";
-        for (int i = 0; i < s.length(); i++) {
+        for (int i = 0; i < s.length() - 1; i++) {
             String temp = findLongestPalindrome(s, i, i);
             if (temp.length() > result.length()) {
                 result = temp;
             }
-        }
-        for (int i = 0; i < s.length() - 1; i++) {
-            String temp = findLongestPalindrome(s, i, i+ 1);
+            temp = findLongestPalindrome(s, i, i + 1);
             if (temp.length() > result.length()) {
                 result = temp;
             }
